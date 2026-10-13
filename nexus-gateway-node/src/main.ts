@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+
 
 async function bootstrap(): Promise<void> {
   // Inicializa o NestJS acoplado ao Fastify Adapter para máxima performance de I/O
@@ -18,6 +20,8 @@ async function bootstrap(): Promise<void> {
       forbidNonWhitelisted: true,
     }),
   );
+
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
   await app.listen(port, '0.0.0.0');
