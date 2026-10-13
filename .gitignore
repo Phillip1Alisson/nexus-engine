@@ -41,3 +41,4 @@ nexus-core-php/storage/logs/
 nexus-core-php/public/storage
 nexus-core-php/.phpunit.result.cache
 nexus-core-php/app/Domain/Financial/Strategies/.phpunit.result.cache
+nexus-core-php/composer.phar
