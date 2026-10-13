@@ -9,6 +9,7 @@ use App\Domain\Inventory\Exceptions\InsufficientStockException;
 use App\Domain\Inventory\Strategies\PepsCostingStrategy;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class PepsCostingStrategyTest extends TestCase
 {
@@ -24,7 +25,7 @@ final class PepsCostingStrategyTest extends TestCase
         $this->productId = 'prod-abc';
     }
 
-    /** @test */
+    #[Test]
     public function it_calculates_cmv_by_deducting_from_the_single_oldest_batch(): void
     {
         $batch = new InventoryBatch(
@@ -43,7 +44,7 @@ final class PepsCostingStrategyTest extends TestCase
         $this->assertEquals(6, $batch->getRemainingQuantity());
     }
 
-    /** @test */
+    #[Test]
     public function it_calculates_cmv_across_multiple_batches_using_fifo_order(): void
     {
         // Lote mais antigo: 5 unidades a R$ 10.00 cada
@@ -77,7 +78,7 @@ final class PepsCostingStrategyTest extends TestCase
         $this->assertEquals(8, $batchNew->getRemainingQuantity());
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_when_requested_quantity_exceeds_available_stock(): void
     {
         $batch = new InventoryBatch(
@@ -90,7 +91,7 @@ final class PepsCostingStrategyTest extends TestCase
         );
 
         $this->expectException(InsufficientStockException::class);
-        
+
         // Tenta tirar 10 unidades de um estoque que só possui 5
         $this->strategy->calculateCmv($this->productId, 10, [$batch]);
     }
