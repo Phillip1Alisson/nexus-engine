@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_with=1);
+declare(strict_types=1);
 
 namespace App\Domain\Inventory\Exceptions;
 
