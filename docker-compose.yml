@@ -1,7 +1,44 @@
 version: '3.8'
 
 services:
-  # Broker de Mensageria compartilhado pelos dois microsserviços
+  # Microsserviço 1: Gateway de Redirecionamento Assíncrono (Node.js)
+  nexus-gateway:
+    build:
+      context: ./nexus-gateway-node
+      dockerfile: Dockerfile
+    container_name: nexus-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - REDIS_HOST=nexus-redis
+      - REDIS_PORT=6379
+    depends_on:
+      - nexus-redis
+    networks:
+      - nexus-network
+
+  # Microsserviço 2: Core Engine Contábil (PHP)
+  nexus-core:
+    build:
+      context: ./nexus-core-php
+      dockerfile: Dockerfile
+    container_name: nexus-core
+    environment:
+      - DB_HOST=nexus-database
+      - DB_PORT=5432
+      - DB_DATABASE=nexus_db
+      - DB_USERNAME=nexus_user
+      - DB_PASSWORD=nexus_password
+      - REDIS_HOST=nexus-redis
+      - REDIS_PORT=6379
+    depends_on:
+      - nexus-database
+      - nexus-redis
+    networks:
+      - nexus-network
+
+  # Broker de Mensageria Compartilhado
   nexus-redis:
     image: redis:7-alpine
     container_name: nexus-redis
@@ -12,7 +49,7 @@ services:
     networks:
       - nexus-network
 
-  # Banco de dados relacional para persistência ACID do Core PHP
+  # Banco de Dados Relacional
   nexus-database:
     image: postgres:16-alpine
     container_name: nexus-database
