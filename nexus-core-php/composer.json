@@ -1,9 +1,21 @@
 {
     "require-dev": {
-        "laravel/pint": "^1.32"
+        "laravel/pint": "^1.32",
+        "phpunit/phpunit": "^11"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "scripts": {
         "lint": "vendor/bin/pint --test",
-        "lint:fix": "vendor/bin/pint"
+        "lint:fix": "vendor/bin/pint",
+        "test": "vendor/bin/phpunit"
     }
 }
